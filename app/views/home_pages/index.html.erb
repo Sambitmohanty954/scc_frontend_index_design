@@ -10,9 +10,9 @@
          <img src="https://documentation.suse.com/sles/15-SP2/html/SLES-all/static/images/logo.svg">
       </div>
       <nav class="navigation" id="mainNav">
-         <a class="navigation__link" href="#1">Overview</a>
+         <a class="navigation__link" href="#1">OVERVIEW</a>
          <a class="navigation__link" href="#2">CONFIGURING CLIENTS TO USE RMT</a>
-         <a class="navigation__link" href="#3">Our Products</a>
+         <a class="navigation__link" href="#3">OUR PRODUCTS</a>
       </nav>
       <div class="page-section hero" id="1">
          <h2>1 <em>Overview</em> </h2>
@@ -149,31 +149,29 @@
             <% parsed_value = JSON.parse(@data) %>
             <% parsed_value.each do |value| %>
             <div class="project">
-               <% if value['free'] == true %>
-               <span class="product-new-label">Free</span>     
-               <%else%>
-               <span class="product-new-label">Paid</span>
-               <%end%>
-               <span class="product-new-label"style="margin-left: 43px;background: green;"><%= value["release_stage"] %></span>
-               <span class="product-discount-label">version:-<%= value["version"] %></span>
+                <% if value['free'] == true %>
+                  <span class="free-label">Free</span>     
+                <%else%>
+                  <span class="free-label">Paid</span>
+                <%end%>
+               <span class="free-label"style="margin-left: 43px;background: green;"><%= value["release_stage"] %></span>
+               <span class="released-label">version:-<%= value["version"] %></span>
                <h3 class="grid__title" style="font-size: 12px;"><%= value["name"] %></h3>
                <div style="line-height: 40px;">
-                  <p>Identifier: <%= value["identifier"] %></p>
-                  <br>
-                  <p>Architectures: <%= value["arch"] %> </p>
-                  <br>
+                  <p>Identifier: <%= value["identifier"] %></p><br>
+                  <p>Architectures: <%= value["arch"] %> </p><br>
                   <p style="font-size: 8px;margin-top: 20px;">CPE :- <%= value["cpe"] %> </p>
                   <%if value["eula_url"].present? %>
-                  <p style="font-size: 08px;margin-top: 37px;">URL :- <%= value["eula_url"] %> </p>
+                    <p style="font-size: 08px;margin-top: 37px;">URL :- <%= value["eula_url"] %> </p>
                   <%end%><br>
                   <%if value["description"].present? %>
-                  <p style="font-size:7px;margin-top: 35px;">
-                     <%= value["description"] %>
-                  </p>
+                    <p style="font-size:7px;margin-top: 35px;">
+                       <%= value["description"] %>
+                    </p>
                   <%end%>
                </div>
                <div class="grid__overlay">
-                  <button class="viewbutton">view more</button>
+                  <button class="viewbutton">Repositories</button>
                </div>
             </div>
             <%end%>
@@ -193,64 +191,34 @@
                      </thead>
                      <tbody>
                         <% parsed_value.each do |values| %>
-                        <% values["repositories"].each do |val| %>
-                        <tr>
-                           <th scope="row"><%= val["name"]%></th>
-                           <td><%= val["url"]%></td>
-                           <td><%= val["enabled"]%></td>
-                           <td><%= val["autorefresh"]%></td>
-                           <td><%= val['installer_updates']%></td>
-                           <td><%= val["description"]%></td>
-                        </tr>
-                        <%end%><%end%>
+                          <% values["repositories"].each do |val| %>
+                            <tr>
+                               <th scope="row"><%= val["name"]%></th>
+                               <td><%= val["url"]%></td>
+                               <td><%= val["enabled"]%></td>
+                               <td><%= val["autorefresh"]%></td>
+                               <td><%= val['installer_updates']%></td>
+                               <td><%= val["description"]%></td>
+                            </tr>
+                          <%end%>
+                        <%end%>
                      </tbody>
                   </table>
                </div>
             </div>
          </section>
       </div>
-   </body>
    <script type="text/javascript">
       const buttons = document.querySelectorAll('.project');
-         const overlay = document.querySelector('.overlay');
-         const overlayImage = document.querySelector('.overlay__inner img');
-      
-         function open(e) {
-         overlay.classList.add('open');
-         const src= e.currentTarget.querySelector('img').src;
-         overlayImage.src = src;
-         }
-      
-         function close() {
-         overlay.classList.remove('open');
-         }
-      
-         buttons.forEach(button => button.addEventListener('click', open));
-         overlay.addEventListener('click', close);
-
-         $(document).ready(function() {
-           $('a[href*=#]').bind('click', function(e) {
-             e.preventDefault();
-             var target = $(this).attr("href"); 
-             $('html, body').stop().animate({
-               scrollTop: $(target).offset().top
-             }, 600, function() {
-               location.hash = target;
-             });
-         
-             return false;
-           });
-         });
-         
-         $(window).scroll(function() {
-           var scrollDistance = $(window).scrollTop();
-         
-           $('.page-section').each(function(i) {
-             if ($(this).position().top <= scrollDistance) {
-               $('.navigation a.active').removeClass('active');
-               $('.navigation a').eq(i).addClass('active');
-             }
-           });
-         }).scroll();
+      const overlay = document.querySelector('.overlay');
+      function open(e) {
+        overlay.classList.add('open');
+      }
+      function close() {
+        overlay.classList.remove('open');
+      }
+      buttons.forEach(button => button.addEventListener('click', open));
+      overlay.addEventListener('click', close);
    </script>
+ </body>
 </html>

@@ -68,12 +68,7 @@ h2 {
 }
 
 .navigation__link:hover {
-  background-color: #aaa;
-}
-
-.navigation__link.active {
-  color: white;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: #000;
 }
 
 p {
@@ -114,11 +109,6 @@ button {
   position: relative;
   background: #000;
   overflow: hidden;
-}
-
-.project img {
-  position: absolute;
-  opacity: 0.9;
 }
 
 .project p {
@@ -175,7 +165,7 @@ button {
 .grid__overlay button:hover {
   transition: all 0.3s ease-in-out;
   background: #fff;
-  color: #d1a39e;
+  color: red;
   transform: scale(1.05);
 }
 
@@ -220,7 +210,7 @@ button {
   letter-spacing: 2px;
 }
 
-.product-new-label {
+.free-label {
   color: #fff;
   background-color: #ef5777;
   font-size: 12px;
@@ -233,7 +223,7 @@ button {
   border-radius: 3px;
 }
 
-.product-discount-label {
+.released-label {
   background-color: #333;
   border-radius: 3px;
   padding: 4px;
