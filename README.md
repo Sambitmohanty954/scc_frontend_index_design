@@ -54,6 +54,8 @@ so i got an idea , you want only index.html page so i create one rails applicati
 * Right now the time complexity of that page will be O(n^2) as i use 2 loop to list out the repositories, so i will try to optimize the time.
 * There is some place where i use same code (HTML & CSS) repeatedly. so for css i will create some class or id on that. for HTML i will create some partial then i can render this in html. (p.s:- If i am using rails, then i should definitely use this technique. cuz ruby is fun).
 * I will definitely want to do this project on some js framework ( Angular or react).
+* I thought of creating this application using ** skip-active-record **. so my main thought was to not using any db related stuff, so i will definitely implement this.
+* Need to improve the design of the page. 
 
 #### Snapshots
 <img width="1433" alt="Screenshot 2022-10-09 at 4 30 37 PM" src="https://user-images.githubusercontent.com/47233211/194753398-9ae10225-bf3e-460b-9698-d15373c40c20.png">
