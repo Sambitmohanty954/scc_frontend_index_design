@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0' >
+      <%= stylesheet_link_tag "index.css" %>
+   </head>
+   <body style="margin-top: 150px;">
+      <div class="header" id="myHeader">
+         <img src="https://documentation.suse.com/sles/15-SP2/html/SLES-all/static/images/logo.svg">
+      </div>
+      <nav class="navigation" id="mainNav">
+         <a class="navigation__link" href="#1">Overview</a>
+         <a class="navigation__link" href="#2">CONFIGURING CLIENTS TO USE RMT</a>
+         <a class="navigation__link" href="#3">Our Products</a>
+      </nav>
+      <div class="page-section hero" id="1">
+         <h2>1 <em>Overview</em> </h2>
+         <p>The Repository Mirroring Tool (RMT) for SUSE Linux Enterprise 15 SP2 allows enterprise customers to optimize the management of SUSE Linux Enterprise software updates and subscription entitlements. It establishes a proxy system for SUSE® Customer Center with repositories and registration targets. This helps you to centrally manage software updates within a firewall on a per-system basis, while maintaining your corporate security policies and regulatory compliance.</p>
+         <p>RMT allows you to provision updates for all of your devices running a product based on SUSE Linux Enterprise. By downloading these updates once and distributing them throughout the enterprise, you can set more restrictive firewall policies. This also reduces bandwidth usage, as there is no need to download the same updates for each device. RMT is fully supported and available as a download for customers with an active SUSE Linux Enterprise product subscription.</p>
+         <p>Repository Mirroring Tool provides functionality that can be useful in many situations, including the following:
+         <div style="margin-left: 30px;">
+            <li>You want to update SUSE Linux Enterprise servers.</li>
+            <li>Not all machines in your environment can be connected to SUSE Customer Center to register and retrieve updates for bandwidth or security reasons.</li>
+            <li>There are SUSE Linux Enterprise hosts that are restricted and difficult to update without putting in place a custom update management solution.</li>
+            <li>You need to integrate additional external or internal repositories.</li>
+            </p>   
+         </div>
+         <img src="https://documentation.suse.com/sles/15-SP2/html/SLES-all/images/rmt_schema.png" width="500" height="250" alt="Dies sind Schüler" class="center">
+      </div>
+      <div class="page-section" id="2">
+         <h2>2 <em>Configuring Clients to Use RMT</em> </h2>
+         <p>
+            Any machine running SUSE Linux Enterprise 12 or newer can be configured to register against RMT and download software updates from there, instead of communicating directly with the SUSE Customer Center.
+         <div class="tips" style="border-color: green;">
+            <div style="display: flex;">
+               <img src="https://documentation.suse.com/sles/15-SP1/single-html/SLES-rmt/static/images/icon-tip.svg" style="margin-bottom: -29px;margin-top: -46px;">
+               <h6 style="    margin-left: 20px;font-size: 20px;margin-bottom: 15px;margin-top: 0px;">Tip: CA Certificate</h6>
+            </div>
+            Although we recommend registering with the RMT server over a secured HTTPS protocol and all examples in this documentation use it, you can generally register with the RMT server over an insecure HTTP protocol. Use this approach only if your setup benefits from it and only in a trusted environment where security is not crucial.   
+         </div>
+         <p>
+            To configure clients to use the RMT server, use one of the following methods:
+         <div style="margin-left: 30px;">
+            <li>Provide the required information with boot parameters. <a href="#2.1">See Section 2.1, “Configuring Clients with Boot Parameters”</a>.</li>
+            <li>Configure the clients using an AutoYaST profile. <a href="#2.2">See Section 2.2, “Configuring Clients with AutoYaST Profile”.</a></li>
+            <li>Use the rmt-client-setup command. <a href="#2.3">See Section 2.3, “Configuring Clients with rmt-client-setup”).</a></li>
+            <li>Use the YaST registration module during installation or later. <a href="#2.4">See Section 2.4, “Configuring Clients with YaST”.</a></li>
+         </div>
+         </p>
+         <div class="tips" style="border-color: green">
+            <div style="display: flex;">
+               <img src="https://documentation.suse.com/sles/15-SP1/single-html/SLES-rmt/static/images/icon-tip.svg" style="margin-bottom: -29px;margin-top: -46px;">
+               <h6 style="    margin-left: 20px;font-size: 20px;margin-bottom: 15px;margin-top: 0px;">Tip: CA Certificate</h6>
+            </div>
+            <p>If you need the CA certificate of the RMT server, find it at /etc/rmt/ssl/rmt-ca.crt and https://RMT_SERVER/rmt.crt.</p>
+         </div>
+         </p>
+         <p>
+         <h2 id="2.1">2.1 <em>Configuring Clients with Boot Parameters</em> </h2>
+         <p>
+            Any client can be configured to use RMT by providing the regurl parameter during machine boot.
+         </p>
+         <p>The parameter needs to be entered as regurl=RMT_SERVER_URL. The URL needs to be in the following format: https://FQDN with FQDN being the fully qualified host name of the RMT server. It must be identical to the FQDN of the server certificate used on the RMT server. Example:</p>
+         <p style="background: black;color: green; text-align: left; padding: 10px;">regurl=https://rmt.example.com
+         <p>
+         <div class="tips" style="border-color: orange">
+            <div style="display: flex;">
+               <img src="https://documentation.suse.com/sles/15-SP1/single-html/SLES-rmt/static/images/icon-warning.svg" style="margin-bottom: -29px;margin-top: -46px;">
+               <h6 style="margin-left: 20px;font-size: 20px;margin-bottom: 15px;margin-top: 0px;">Warning: Beware of Typing Errors</h6>
+            </div>
+            <p>Make sure the values you enter are correct. If regurl has not been specified correctly, the registration of the update source will fail.</p>
+         </div>
+         <br><br>
+         <div class="tips" style="border-color: darkblue;">
+            <div style="display: flex;">
+               <img src="https://documentation.suse.com/sles/15-SP1/single-html/SLES-rmt/static/images/icon-note.svg" style="margin-bottom: -29px;margin-top: -46px;">
+               <h6 style="margin-left: 20px;font-size: 20px;margin-bottom: 15px;margin-top: 0px;">Note: Change of RMT Server Certificate</h6>
+            </div>
+            <p>If the RMT server gets a new certificate from an untrusted CA, the clients need to retrieve the new CA certificate file. YaST displays a dialog for importing a new certificate. If you confirm importing the new certificate, the old one is replaced with the new one.</p>
+         </div>
+         </p>
+         <p>
+         </p>
+         <h2 id="2.2">2.2 <em>Configuring Clients with AutoYaST Profile</em> </h2>
+         <p>
+            Clients can be configured to register with RMT server via AutoYaST profile. For general information about creating AutoYaST profiles and preparing automatic installation, refer to the AutoYaST Guide. In this section, only RMT specific configuration is described.  
+         </p>
+         <p>
+            To configure RMT specific data using AutoYaST, follow the steps for the relevant version of RMT client. 
+         </p>
+         <li>
+            As root, start YaST and select Miscellaneous › Autoinstallation to start the graphical AutoYaST front-end. From a command line, you can start the graphical AutoYaST front-end with the yast2 autoyast command.
+         </li>
+         <li>
+            Open an existing profile using File › Open, create a profile based on the current system's configuration using Tools › Create Reference Profile, or work with an empty profile.  
+         </li>
+         <li>
+            Select Software › Product Registration. An overview of the current configuration is shown.
+         </li>
+         <li>
+            Click Edit.
+         </li>
+         <li>
+            Check Register the Product, set the URL of the RMT server in Use Specific Server URL Instead of the Default, and you can set the Optional SSL Server Certificate URL. The possible values for the server URL are the same as for the kernel parameter regurl. For the SSL certificate location, you can use either HTTP or HTTPS based URLs.   
+         </li>
+         <li>
+            Perform all other configuration needed for the systems to be deployed, then click Finish to return to the main screen.
+         </li>
+         <li>
+            Select File › Save As and enter a file name for the profile, such as autoinst.xml.
+         </li>
+         <h2 id="2.3">2.3 <em>Configuring Clients with rmt-client-setup</em> </h2>
+         <p>The /usr/share/rmt/public/tools/rmt-client-setup script is provided in the package rmt-server. This script allows you to configure a client machine to use an RMT server. It can also be used to reconfigure an existing client to use a different RMT server.
+            To configure a client machine to use RMT with rmt-client-setup, follow these steps:
+         </p>
+         <div class="container">
+            <ol>
+               <li>Download rmt-client-setup from the RMT server:</li>
+               <p style="background: black;color: green; text-align: left; padding: 10px;">curl http://RMT_SERVER/tools/rmt-client-setup --output rmt-client-setup</p>
+               <li>Executing this script will import the RMT CA's certificate into the trusted store.</li>
+               <li>Alternatively, you can specify the correct fingerprint or path to the server certificate. For details, see sh rmt-client-setup --help.</li>
+               <li>The script downloads the server's CA certificate. Accept it by pressing Y. The tool now performs all necessary modifications on the client.</li>
+               <li>Use SUSEConnect to add more products. For details, run SUSEConnect --help .</li>
+            </ol>
+         </div>
+         <h2 id="2.4">2.4 <em>Configuring Clients with YaST</em> </h2>
+         <p>To configure a client to perform the registration against an RMT server use the YaST Product Registration module yast2 registration.</p>
+         <p>On the client, the credentials are not necessary and you may leave the relevant fields empty. Click Local Registration Server and enter its URL. Then click Next until the exit from the module.</p>
+         <h2>2.5 <em>Configuring Clients for Custom Stand-alone Repositories</em> </h2>
+         4.5 REPORT DOCUMENTATION BUG
+         <p>If you created a custom stand-alone repository on the RMT server, it will not be registered on client machines with SUSEConnect because it has no parent product.
+            To add the repository manually, follow these steps:
+            Point your Web browser to the following RMT server URL:
+         </p>
+         <p style="background: black;color: green; text-align: left; padding: 10px;">https://RMT_SERVER_HOSTNAME/repo/ </p>
+         <p>Navigate the browser through the directory structure to your custom repository's repodata/ subdirectory.
+            On the client machine, add the discovered repository URL:
+         </p>
+         <p style="background: black;color: green; text-align: left; padding: 10px;">sudo zypper ar CUSTOM_REPO_URL CUSTOM_REPO_NAME</p>
+         <h2>2.6 <em>Listing Accessible Repositories</em> </h2>
+         <p>To list available modules and repositories, use SUSEConnect --list-extensions. Alternatively, you can also browse the directory listing of the RMT server by visiting https://RMT_SERVER/repo/ and its subdirectories.</p>
+         <h2>2.6 <em>Online Migration of SUSE Linux Enterprise Clients</em> </h2>
+         <p>SUSE Linux Enterprise clients registered against RMT can be migrated online to the latest service pack of the same major release the same way as clients registered against SUSE Customer Center. Before starting the migration, make sure that RMT has the required products available and mirrored.</p>
+      </div>
+      <h2 style="text-align: center;font-size: 39px;font-family: monospace;text-transform: uppercase;margin-bottom: -42px;margin-left: 100px;"><em>Our Products</em> </h2>
+      <div class="page-section" id="3">
+         <section id="portfolio">
+            <% parsed_value = JSON.parse(@data) %>
+            <% parsed_value.each do |value| %>
+            <div class="project">
+               <% if value['free'] == true %>
+               <span class="product-new-label">Free</span>     
+               <%else%>
+               <span class="product-new-label">Paid</span>
+               <%end%>
+               <span class="product-new-label"style="margin-left: 43px;background: green;"><%= value["release_stage"] %></span>
+               <span class="product-discount-label">version:-<%= value["version"] %></span>
+               <h3 class="grid__title" style="font-size: 12px;"><%= value["name"] %></h3>
+               <div style="line-height: 40px;">
+                  <p>Identifier: <%= value["identifier"] %></p>
+                  <br>
+                  <p>Architectures: <%= value["arch"] %> </p>
+                  <br>
+                  <p style="font-size: 8px;margin-top: 20px;">CPE :- <%= value["cpe"] %> </p>
+                  <%if value["eula_url"].present? %>
+                  <p style="font-size: 08px;margin-top: 37px;">URL :- <%= value["eula_url"] %> </p>
+                  <%end%><br>
+                  <%if value["description"].present? %>
+                  <p style="font-size:7px;margin-top: 35px;">
+                     <%= value["description"] %>
+                  </p>
+                  <%end%>
+               </div>
+               <div class="grid__overlay">
+                  <button class="viewbutton">view more</button>
+               </div>
+            </div>
+            <%end%>
+            <div class="overlay">
+               <div class="overlay__inner">
+                  <button class="close">close X</button>
+                  <table style="margin-bottom:100px;">
+                     <thead>
+                        <tr>
+                           <th scope="col">Url</th>
+                           <th scope="col" style="text-align:center;">Name</th>
+                           <th scope="col">Enabled</th>
+                           <th scope="col">Autorefresh</th>
+                           <th scope="col">Installer Updates</th>
+                           <th scope="col">Description</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <% parsed_value.each do |values| %>
+                        <% values["repositories"].each do |val| %>
+                        <tr>
+                           <th scope="row"><%= val["name"]%></th>
+                           <td><%= val["url"]%></td>
+                           <td><%= val["enabled"]%></td>
+                           <td><%= val["autorefresh"]%></td>
+                           <td><%= val['installer_updates']%></td>
+                           <td><%= val["description"]%></td>
+                        </tr>
+                        <%end%><%end%>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </section>
+      </div>
+   </body>
+   <script type="text/javascript">
+      const buttons = document.querySelectorAll('.project');
+         const overlay = document.querySelector('.overlay');
+         const overlayImage = document.querySelector('.overlay__inner img');
+      
+         function open(e) {
+         overlay.classList.add('open');
+         const src= e.currentTarget.querySelector('img').src;
+         overlayImage.src = src;
+         }
+      
+         function close() {
+         overlay.classList.remove('open');
+         }
+      
+         buttons.forEach(button => button.addEventListener('click', open));
+         overlay.addEventListener('click', close);
+
+         $(document).ready(function() {
+           $('a[href*=#]').bind('click', function(e) {
+             e.preventDefault();
+             var target = $(this).attr("href"); 
+             $('html, body').stop().animate({
+               scrollTop: $(target).offset().top
+             }, 600, function() {
+               location.hash = target;
+             });
+         
+             return false;
+           });
+         });
+         
+         $(window).scroll(function() {
+           var scrollDistance = $(window).scrollTop();
+         
+           $('.page-section').each(function(i) {
+             if ($(this).position().top <= scrollDistance) {
+               $('.navigation a.active').removeClass('active');
+               $('.navigation a').eq(i).addClass('active');
+             }
+           });
+         }).scroll();
+   </script>
+</html>
